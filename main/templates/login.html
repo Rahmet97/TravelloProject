@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,22 +6,56 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Login</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+    <link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'styles/main.css' %}">
 </head>
-<body>
-    <form action="login" method="post">
-        {% csrf_token %}
+<body style="background-image: url({% static 'images/plainontheglobe.jpg' %}); background-size: 100%;">
+    <div class="container">
+        <div class="row justify-content-center" style="margin-top: 25%;">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center"><h4 style="color: blue;">Sign in</h4></div>
+                    <div class="card-body">
 
-        <input type="text" name="username" placeholder="Username"><br>
-        <input type="password" name="password" placeholder="Password"><br>
-        <input type="submit">
-    </form>
+                        <form class="form-horizontal" method="post" action="login">
+                        {% csrf_token %}
+                            <div class="form-group">
+                                <label for="username" class="cols-sm-2 control-label">Username</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                        <input type="text" class="form-control" name="username" id="username" placeholder="Enter your Username" value=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="cols-sm-2 control-label">Password</label>
+                                <div class="cols-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Enter your Password" value=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-5">
+                                <input type="submit" class="btn btn-primary btn-lg btn-block login-button" value="Sign in">
+                            </div>
+                        </form>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
     <div>
         {% for message in messages %}
             <h3>{{ message }}</h3>
         {% endfor %}
     </div>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
 </body>
 </html>
