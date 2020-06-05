@@ -8,6 +8,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Travello template project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/destinations.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
 <link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
@@ -78,8 +79,8 @@
 		<div class="menu_content">
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="contact.html">Contact</a></li>
-				<li><a href="about.html">About us</a></li>
+				<li><a href="contact">Contact</a></li>
+				<li><a href="about">About us</a></li>
 				
 				{% if user.is_authenticated %}
 					<li>Hello, {{ user.first_name }}</li>
@@ -161,12 +162,17 @@
 
 			<div class="home_page_nav">
 				<ul class="d-flex flex-column align-items-end justify-content-end">
-					{% if count < 10 %}
-					<li><a data-scroll-to="#destinations">Offers<span>0{{count}}</span></a></li>
+					{% if destcount < 10 %}
+					<li><a data-scroll-to="#destinations">Offers<span>0{{destcount}}</span></a></li>
 					{% else %}
-					<li><a data-scroll-to="#destinations">Offers<span>{{count}}</span></a></li>
+					<li><a data-scroll-to="#destinations">Offers<span>{{destcount}}</span></a></li>
 					{% endif %}
-					<li><a data-scroll-to="#testimonials">Testimonials<span>02</span></a></li>
+
+					{% if tescount < 10 %}
+					<li><a data-scroll-to="#testimonials">Testimonials<span>0{{tescount}}</span></a></li>
+					{% else %}
+					<li><a data-scroll-to="#testimonials">Testimonials<span>{{tescount}}</span></a></li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>
@@ -184,9 +190,9 @@
 							<form action="search" class="home_search_form" id="home_search_form" method="post">
 								{% csrf_token %}
 								<div class="d-flex flex-lg-row flex-column align-items-start justify-content-lg-between justify-content-start">
-									<input type="text" name="city" class="search_input search_input_1" placeholder="City" required>
-									<input type="text" name="Rating" class="search_input search_input_3" placeholder="'Rating" required>
-									<input type="text" name="budget" class="search_input search_input_4" placeholder="Budget" required>
+									<input type="text" name="city" class="search_input search_input_1" placeholder="City">
+									<input type="number" name="rating" class="search_input search_input_3" value="0" placeholder="'Rating">
+									<input type="number" name="budget" class="search_input search_input_4" value="0" placeholder="Budget">
 									<input type="submit" class="home_search_button" value="search">
 								</div>
 							</form>
@@ -254,7 +260,7 @@
 			<div class="row">
 				<div class="col text-center">
 					<div class="section_subtitle">simply amazing places</div>
-					<div class="section_title"><h2>Popular Destinations</h2></div>
+					<div class="section_title"><h2>Destinations</h2></div>
 				</div>
 			</div>
 			<div class="row destinations_row">
@@ -262,7 +268,7 @@
 					<div class="destinations_container item_grid">
 
 						<!-- Destination -->
-						{% for dest in dests %}
+						{% for dest in queryset %}
 
 						<div class="destination item">
 							<div class="destination_image">
@@ -273,15 +279,37 @@
 								{% endif %}
 							</div>
 							<div class="destination_content">
-								<div class="destination_title"><a href="destinations">{{dest.name}}</a></div>
+								<div class="destination_title"><a href="#">{{dest.name}}</a></div>
 								<div class="destination_subtitle"><p>{{dest.desc}}</p></div>
 								<div class="destination_price">From ${{dest.price}}</div>
+								<div class="destination_list">
+									<ul>
+										<li>{{dest.rating}} Stars Hotel</li>
+										<li>All Inclusive</li>
+										<li>Flight tickets included</li>
+										<li>Guided visits</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 						{% endfor %}
 					</div>
 				</div>
 			</div>
+
+			<!-- Pagination -->
+
+			<nav aria-label="Page navigation example">
+				<ul class="pagination pagination-template d-flex justify-content-center">
+					{% if queryset.has_previous %}
+					<li class="page-item"><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}" class="page-link"><i class="fa fa-angle-left"></i></a></li>
+					{% endif %}
+					<li class="page-item"><a href="?{{ page_request_var }}={{ queryset.number }}" class="page-link activate">{{ queryset.number }}</a></li>
+					{% if queryset.has_next %}
+					<li class="page-item"><a href="?{{ page_request_var }}={{ queryset.next_page_number }}" class="page-link"><i class="fa fa-angle-right"></i></a></li>
+					{% endif %}
+				</ul>
+			</nav>
 		</div>
 	</div>
 
